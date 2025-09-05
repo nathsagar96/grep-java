@@ -2,13 +2,13 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-  public static void main(String[] args){
+  public static void main(String[] args) {
     if (args.length != 2 || !args[0].equals("-E")) {
       System.out.println("Usage: ./your_program.sh -E <pattern>");
       System.exit(1);
     }
 
-    String pattern = args[1];  
+    String pattern = args[1];
     Scanner scanner = new Scanner(System.in);
     String inputLine = scanner.nextLine();
 
@@ -24,7 +24,9 @@ public class Main {
       return inputLine.contains(pattern);
     } else if (pattern.equals("\\d")) {
       return inputLine.chars().anyMatch(Character::isDigit);
-    }  else {
+    } else if (pattern.equals("\\w")) {
+      return inputLine.chars().anyMatch(c -> Character.isLetterOrDigit(c) || c == '_');
+    } else {
       throw new RuntimeException("Unhandled pattern: " + pattern);
     }
   }
