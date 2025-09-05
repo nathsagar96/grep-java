@@ -78,6 +78,9 @@ public class Main {
   }
 
   public static boolean matchPattern(String inputLine, String pattern) {
+    if (!pattern.isEmpty() && pattern.charAt(0) == '^') {
+      return matchHere(inputLine, 0, pattern, 1);
+    }
     for (int i = 0; i <= inputLine.length(); i++) {
       if (matchHere(inputLine, i, pattern, 0)) {
         return true;
