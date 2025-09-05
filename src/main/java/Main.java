@@ -54,6 +54,9 @@ public class Main {
         boolean matched = charClass.indexOf(c) != -1;
         idx[0]++;
         return negate != matched;
+      case '.':
+        idx[0]++;
+        return c != '\n';
       default:
         idx[0]++;
         return c == pattern.charAt(idx[0] - 1);
