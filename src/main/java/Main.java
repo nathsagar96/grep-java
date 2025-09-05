@@ -69,6 +69,13 @@ public class Main {
       return false;
     }
 
+    if (patternIdx < pattern.length() - 1 && pattern.charAt(patternIdx + 1) == '$') {
+      int[] idx = { patternIdx };
+      return matchChar(input.charAt(inputIdx), pattern, idx) &&
+          inputIdx == input.length() - 1 &&
+          patternIdx + 1 == pattern.length() - 1;
+    }
+
     int[] idx = { patternIdx };
     if (matchChar(input.charAt(inputIdx), pattern, idx)) {
       return matchHere(input, inputIdx + 1, pattern, idx[0]);
@@ -79,8 +86,9 @@ public class Main {
 
   public static boolean matchPattern(String inputLine, String pattern) {
     if (!pattern.isEmpty() && pattern.charAt(0) == '^') {
-      return matchHere(inputLine, 0, pattern, 1);
+      return matchHere(inputLine, 0, pattern.substring(1), 0);
     }
+
     for (int i = 0; i <= inputLine.length(); i++) {
       if (matchHere(inputLine, i, pattern, 0)) {
         return true;
