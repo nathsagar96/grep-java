@@ -76,27 +76,45 @@ public class Main {
           patternIdx + 1 == pattern.length() - 1;
     }
 
-    if (patternIdx < pattern.length() - 1 && pattern.charAt(patternIdx + 1) == '+') {
-      char ch = pattern.charAt(patternIdx);
+    if (patternIdx < pattern.length() - 1) {
+      char nextChar = pattern.charAt(patternIdx + 1);
 
-      if (inputIdx >= input.length() ||
-          (ch != '.' && ch != input.charAt(inputIdx)) ||
-          (ch == '.' && patternIdx > 0 && pattern.charAt(patternIdx - 1) == '\\')) {
+      if (nextChar == '+') {
+        char ch = pattern.charAt(patternIdx);
+
+        if (inputIdx >= input.length() ||
+            (ch != '.' && ch != input.charAt(inputIdx)) ||
+            (ch == '.' && patternIdx > 0 && pattern.charAt(patternIdx - 1) == '\\')) {
+          return false;
+        }
+
+        int max = inputIdx + 1;
+        while (max <= input.length() &&
+            (max == input.length() ||
+                ch == input.charAt(max - 1) ||
+                (ch == '.' && (patternIdx == 0 || pattern.charAt(patternIdx - 1) != '\\')))) {
+          if (matchHere(input, max, pattern, patternIdx + 2)) {
+            return true;
+          }
+          max++;
+        }
+
         return false;
       }
 
-      int max = inputIdx + 1;
-      while (max <= input.length() &&
-          (max == input.length() ||
-              ch == input.charAt(max - 1) ||
-              (ch == '.' && (patternIdx == 0 || pattern.charAt(patternIdx - 1) != '\\')))) {
-        if (matchHere(input, max, pattern, patternIdx + 2)) {
-          return true;
-        }
-        max++;
-      }
+      if (nextChar == '?') {
+        char ch = pattern.charAt(patternIdx);
 
-      return false;
+        if (inputIdx < input.length() &&
+            (ch == '.' || ch == input.charAt(inputIdx)) &&
+            !(ch == '.' && patternIdx > 0 && pattern.charAt(patternIdx - 1) == '\\')) {
+          if (matchHere(input, inputIdx + 1, pattern, patternIdx + 2)) {
+            return true;
+          }
+        }
+
+        return matchHere(input, inputIdx, pattern, patternIdx + 2);
+      }
     }
 
     int[] idx = { patternIdx };
