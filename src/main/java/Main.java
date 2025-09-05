@@ -27,8 +27,13 @@ public class Main {
     } else if (pattern.equals("\\w")) {
       return inputLine.chars().anyMatch(c -> Character.isLetterOrDigit(c) || c == '_');
     } else if (pattern.startsWith("[") && pattern.endsWith("]")) {
-      String chars = pattern.substring(1, pattern.length() - 1);
-      return inputLine.chars().anyMatch(c -> chars.indexOf(c) != -1);
+      if (pattern.startsWith("[^")) {
+        String chars = pattern.substring(2, pattern.length() - 1);
+        return inputLine.chars().anyMatch(c -> chars.indexOf(c) == -1);
+      } else {
+        String chars = pattern.substring(1, pattern.length() - 1);
+        return inputLine.chars().anyMatch(c -> chars.indexOf(c) != -1);
+      }
     } else {
       throw new RuntimeException("Unhandled pattern: " + pattern);
     }
